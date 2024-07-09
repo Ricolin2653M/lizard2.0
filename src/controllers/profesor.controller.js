@@ -34,7 +34,7 @@ export const getProfesorById = async (req, res) => {
 export const createProfesor = async (req, res) => {
     try {
         const { nombre, apellidos, numeroEmpleado, correo, fechaNacimiento } = req.body;
-        const newProfesor = new Profesor({ nombre, apellidos, numeroEmpleado, correo, fechaNacimiento });
+        const newProfesor = new Profesor({ nombre, apellidos, numeroEmpleado, correo, fechaNacimiento: new Date(fechaNacimiento) });
         const profesorSave = await newProfesor.save();
         res.status(201).json(profesorSave);
     } catch (error) {
