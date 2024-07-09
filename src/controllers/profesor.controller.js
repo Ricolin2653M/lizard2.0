@@ -31,15 +31,33 @@ export const getProfesorById = async (req, res) => {
 }
 
 // Crear un nuevo profesor
+import Profesor from './path/to/profesorModel'; // Asegúrate de actualizar la ruta al modelo
+
 export const createProfesor = async (req, res) => {
     try {
         const { nombre, apellidos, numeroEmpleado, correo, fechaNacimiento } = req.body;
-        const newProfesor = new Profesor({ nombre, apellidos, numeroEmpleado, correo, fechaNacimiento: new Date(fechaNacimiento) });
+
+        // Convertir la fecha a un objeto Date
+        const fechaNacimientoDate = new Date(fechaNacimiento);
+
+        // Validar que la fecha es válida
+        if (isNaN(fechaNacimientoDate.getTime())) {
+            return res.status(400).json({ message: 'Fecha de nacimiento no válida' });
+        }
+
+        const newProfesor = new Profesor({
+            nombre,
+            apellidos,
+            numeroEmpleado,
+            correo,
+            fechaNacimiento: fechaNacimientoDate
+        });
+
         const profesorSave = await newProfesor.save();
         res.status(201).json(profesorSave);
     } catch (error) {
         console.error('Error al crear profesor:', error);
-        res.status(500).json({ message: 'Error en el servidor' });
+        res.status(500).json({ message: 'Error en el servidor', error: error.message });
     }
 }
 
