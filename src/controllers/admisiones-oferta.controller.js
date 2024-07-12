@@ -5,9 +5,19 @@ import mongoose from 'mongoose';
 // Endpoint para vincular una admisión con una o varias ofertas educativas
 export const linkAdmisionToOferta = async (req, res) => {
     try {
-        // Verificar si se proporciona un único admisionId
-        if (!req.body.admisionId || !mongoose.Types.ObjectId.isValid(req.body.admisionId)) {
-            return res.status(400).json({ message: 'ID de admisión inválido' });
+        // Verificar si se proporciona un único admisionId o un array de admisionIds
+        let admisionIds = [];
+        if (Array.isArray(req.body.admisionId)) {
+            admisionIds = req.body.admisionId;
+        } else {
+            admisionIds = [req.body.admisionId];
+        }
+
+        // Validar que todos los admisionIds sean válidos
+        for (let admisionId of admisionIds) {
+            if (!mongoose.Types.ObjectId.isValid(admisionId)) {
+                return res.status(400).json({ message: `ID de admisión inválido: ${admisionId}` });
+            }
         }
 
         // Verificar si se proporciona un array de ofertaIds
@@ -15,14 +25,9 @@ export const linkAdmisionToOferta = async (req, res) => {
             return res.status(400).json({ message: 'Se debe proporcionar al menos un ID de oferta educativa válido' });
         }
 
-        // Verificar si hay más de un admisionId
-        if (req.body.ofertaIds.length > 1) {
-            return res.status(400).json({ message: 'Solo se puede vincular una admisión a una o varias ofertas educativas en una solicitud' });
-        }
-
-        const admision = await Admision.findById(req.body.admisionId);
-        if (!admision) {
-            return res.status(404).json({ message: 'Admision no encontrada' });
+        const admisiones = await Admision.find({ _id: { $in: admisionIds } });
+        if (admisiones.length !== admisionIds.length) {
+            return res.status(404).json({ message: 'No se encontraron todas las admisiones especificadas' });
         }
 
         const ofertasEducativas = await OfertaEducativa.find({ _id: { $in: req.body.ofertaIds } });
@@ -30,26 +35,35 @@ export const linkAdmisionToOferta = async (req, res) => {
             return res.status(404).json({ message: 'No se encontraron todas las ofertas educativas especificadas' });
         }
 
-        // Vincular la admisión con las ofertas educativas
-        admision.ofertasEducativas = req.body.ofertaIds;
-        await admision.save();
-
-        // Actualizar las ofertas educativas con la admisión vinculada
-        for (let ofertaId of req.body.ofertaIds) {
-            const oferta = await OfertaEducativa.findById(ofertaId);
-            if (oferta) {
-                if (!oferta.admisiones.includes(req.body.admisionId)) {
-                    oferta.admisiones.push(req.body.admisionId);
-                    await oferta.save();
+        // Vincular cada admisión con las ofertas educativas correspondientes
+        for (let admisionId of admisionIds) {
+            const admision = admisiones.find(admision => admision._id.toString() === admisionId.toString());
+            if (admision) {
+                for (let ofertaId of req.body.ofertaIds) {
+                    if (!admision.ofertasEducativas.includes(ofertaId)) {
+                        admision.ofertasEducativas.push(ofertaId);
+                    }
                 }
+                await admision.save();
             }
         }
 
-        res.json({ message: 'Admision y ofertas educativas vinculadas exitosamente' });
+        // Actualizar las ofertas educativas con las admisiones vinculadas
+        for (let ofertaId of req.body.ofertaIds) {
+            const oferta = ofertasEducativas.find(oferta => oferta._id.toString() === ofertaId.toString());
+            if (oferta) {
+                for (let admisionId of admisionIds) {
+                    if (!oferta.admisiones.includes(admisionId)) {
+                        oferta.admisiones.push(admisionId);
+                    }
+                }
+                await oferta.save();
+            }
+        }
+
+        res.json({ message: 'Admisiones y ofertas educativas vinculadas exitosamente' });
     } catch (error) {
-        console.error('Error al vincular admisión con oferta educativa:', error);
+        console.error('Error al vincular admisiones con ofertas educativas:', error);
         res.status(500).json({ message: 'Error en el servidor' });
     }
 }
-
-//Un komentario al final por k zi
