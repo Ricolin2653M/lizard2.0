@@ -4,8 +4,18 @@ import mongoose from 'mongoose';
 // Obtener todas las ofertas educativas
 export const getOfertas = async (req, res) => {
     try {
-        const ofertas = await OfertaEducativa.find();
-        res.json(ofertas);
+        const ofertas = await OfertaEducativa.find().populate({
+            path: 'admisiones',
+            select: 'nombre' // Seleccionar solo el campo 'nombre' de la admisión
+        });
+
+        // Mapear las admisiones para obtener solo los nombres en lugar de objetos completos
+        const formattedOfertas = ofertas.map(oferta => ({
+            ...oferta.toObject(),
+            admisiones: oferta.admisiones.map(admision => admision.nombre)
+        }));
+
+        res.json(formattedOfertas);
     } catch (error) {
         console.error('Error al obtener ofertas educativas:', error);
         res.status(500).json({ message: 'Error en el servidor' });
