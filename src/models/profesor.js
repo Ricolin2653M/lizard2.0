@@ -24,7 +24,11 @@ const profesorSchema = new Schema({
     fechaNacimiento: {
         type: Date,
         required: true
-    }
+    },
+    ofertasEducativas: [{
+        type: Schema.Types.ObjectId,
+        ref: 'OfertaEducativa'
+    }]
 }, {
     timestamps: true,
     versionKey: false

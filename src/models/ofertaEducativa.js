@@ -14,7 +14,12 @@ const ofertaEducativaSchema = new Schema({
     admisiones: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Admision'
+    }],
+    profesores: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Profesor'
     }]
+
 }, {
     timestamps: true,
     versionKey: false
