@@ -1,5 +1,6 @@
 import OfertaEducativa from '../models/ofertaEducativa.js';
 import Profesor from '../models/profesor.js';
+import mongoose from 'mongoose';
 
 export const relacionarOfertaProfesor = async (req, res) => {
     try {
