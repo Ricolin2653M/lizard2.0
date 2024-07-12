@@ -23,17 +23,6 @@ export const linkAdmisionToOferta = async (req, res) => {
             return res.status(400).json({ message: 'Se debe proporcionar al menos un ID de oferta educativa válido' });
         }
 
-        // Verificar la existencia y validez de los IDs de oferta educativa
-        const ofertaIds = req.body.ofertaIds.map(id => mongoose.Types.ObjectId(id)); // Convertir a ObjectId
-
-        // Buscar las ofertas educativas por sus IDs
-        const ofertasEducativas = await OfertaEducativa.find({ _id: { $in: ofertaIds } });
-        
-        // Validar que se encontraron todas las ofertas educativas
-        if (ofertasEducativas.length !== ofertaIds.length) {
-            return res.status(404).json({ message: 'No se encontraron todas las ofertas educativas especificadas' });
-        }
-
         // Obtener la admisión actual
         const admision = await Admision.findById(admisionId);
         if (!admision) {
@@ -44,7 +33,7 @@ export const linkAdmisionToOferta = async (req, res) => {
         const ofertasEducativasActuales = admision.ofertasEducativas.map(oe => oe.toString());
 
         // Identificar las ofertas educativas que deben ser eliminadas
-        const ofertaIdsEntrantes = ofertaIds.map(id => id.toString());
+        const ofertaIdsEntrantes = req.body.ofertaIds.map(id => id.toString());
         const ofertasAEliminar = ofertasEducativasActuales.filter(oe => !ofertaIdsEntrantes.includes(oe));
 
         // Eliminar las ofertas educativas que ya no están presentes en req.body.ofertaIds
@@ -62,7 +51,7 @@ export const linkAdmisionToOferta = async (req, res) => {
         }
 
         // Vincular las ofertas educativas recibidas con la admisión
-        for (let ofertaId of ofertaIds) {
+        for (let ofertaId of req.body.ofertaIds) {
             if (!admision.ofertasEducativas.includes(ofertaId)) {
                 admision.ofertasEducativas.push(ofertaId);
             }
@@ -71,6 +60,7 @@ export const linkAdmisionToOferta = async (req, res) => {
         await admision.save();
 
         // Actualizar las ofertas educativas con la admisión vinculada
+        const ofertasEducativas = await OfertaEducativa.find({ _id: { $in: req.body.ofertaIds } });
         for (let oferta of ofertasEducativas) {
             if (!oferta.admisiones.includes(admisionId)) {
                 oferta.admisiones.push(admisionId);
