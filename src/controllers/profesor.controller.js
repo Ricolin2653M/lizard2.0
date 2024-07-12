@@ -31,8 +31,6 @@ export const getProfesorById = async (req, res) => {
 }
 
 // Crear un nuevo profesor
-import Profesor from './path/to/profesorModel'; // Asegúrate de actualizar la ruta al modelo
-
 export const createProfesor = async (req, res) => {
     try {
         const { nombre, apellidos, numeroEmpleado, correo, fechaNacimiento } = req.body;

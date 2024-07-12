@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 
 const admisionSchema = new Schema({
     nombre: {
@@ -8,7 +8,11 @@ const admisionSchema = new Schema({
     activo: {
         type: Boolean,
         default: true
-    }
+    },
+    ofertasEducativas: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'OfertaEducativa'
+    }]
 }, {
     timestamps: true,
     versionKey: false
