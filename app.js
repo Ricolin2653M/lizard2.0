@@ -45,6 +45,6 @@ app.use('/api/auth',authRoutes);
 app.use('/api/oferta',ofertaRoutes);
 app.use('/api/profesores',profesorRoutes);
 app.use('/api/users',userRoutes);
-app.use('/api/admisiones-oferta',);
+app.use('/api/admisiones-oferta',admisionesOferta);
 
 export default app;
