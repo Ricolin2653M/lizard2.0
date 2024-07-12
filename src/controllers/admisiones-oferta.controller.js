@@ -46,3 +46,4 @@ export const linkAdmisionToOferta = async (req, res) => {
         res.status(500).json({ message: 'Error en el servidor' });
     }
 };
+//Un komentario al final por k zi

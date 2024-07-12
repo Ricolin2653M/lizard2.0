@@ -1,9 +1,9 @@
 import { Router } from "express";
-import * as oferAdmi from "../controllers/oferta-admisiones.controller";
+import {linkAdmisionToOferta} from '../controllers/admisiones-oferta.controller.js';
 
 const router = Router();
 
 
-router.post('/', oferAdmi.linkAdmisionToOferta);
+router.post('/',linkAdmisionToOferta);
 
 export default router;
