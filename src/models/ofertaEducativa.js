@@ -10,11 +10,7 @@ const ofertaEducativaSchema = new Schema({
     activo: {
         type: Boolean,
         default: true
-    },
-    admisiones: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Admision'
-    }]
+    }
 }, {
     timestamps: true,
     versionKey: false
