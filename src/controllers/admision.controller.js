@@ -1,9 +1,24 @@
 import Admision from '../models/admision.js';
 import mongoose from 'mongoose';
 
-export const getAdmisiones = async (req, res) =>{
-    const admisiones = await Admision.find();
-    res.json(admisiones);
+export const getAdmisiones = async (req, res) => {
+    try {
+        const admisiones = await Admision.find().populate({
+            path: 'ofertasEducativas',
+            select: 'nombre' // Seleccionar solo el campo 'nombre' de la oferta educativa
+        });
+
+        // Mapear las ofertas educativas para obtener solo los nombres en lugar de objetos completos
+        const formattedAdmisiones = admisiones.map(admision => ({
+            ...admision.toObject(),
+            ofertasEducativas: admision.ofertasEducativas.map(oferta => oferta.nombre)
+        }));
+
+        res.json(formattedAdmisiones);
+    } catch (error) {
+        console.error('Error al obtener admisiones:', error);
+        res.status(500).json({ message: 'Error en el servidor' });
+    }
 }
 
 // Obtener una admisión por su ID
