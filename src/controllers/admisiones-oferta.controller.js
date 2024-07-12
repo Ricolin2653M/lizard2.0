@@ -39,6 +39,15 @@ export const linkAdmisionToOferta = async (req, res) => {
         // Eliminar las ofertas educativas que ya no están presentes en req.body.ofertaIds
         if (ofertasAEliminar.length > 0) {
             admision.ofertasEducativas = admision.ofertasEducativas.filter(oe => !ofertasAEliminar.includes(oe.toString()));
+            
+            // Eliminar la referencia de admisionId en las ofertas educativas eliminadas
+            for (let ofertaId of ofertasAEliminar) {
+                const oferta = await OfertaEducativa.findById(ofertaId);
+                if (oferta) {
+                    oferta.admisiones = oferta.admisiones.filter(a => a.toString() !== admisionId.toString());
+                    await oferta.save();
+                }
+            }
         }
 
         // Vincular las ofertas educativas recibidas con la admisión
