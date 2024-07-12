@@ -10,7 +10,7 @@ createRoles();
 
 //Ruta inicial
 app.get('/', (req, res) =>{
-    res.send(messages.Welcome)
+    res.send("Hola")
 });
 
 
