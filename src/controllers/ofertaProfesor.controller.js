@@ -22,28 +22,35 @@ export const relacionarOfertaProfesor = async (req, res) => {
             return res.status(400).json({ message: 'Se debe proporcionar al menos un ID de profesor válido' });
         }
 
+        // Verificar que cada profesorId sea válido
+        for (let profesorId of req.body.profesorIds) {
+            if (!mongoose.Types.ObjectId.isValid(profesorId)) {
+                return res.status(400).json({ message: `ID de profesor inválido: ${profesorId}` });
+            }
+        }
+
         // Obtener la oferta actual
-        const oferta = await OfertaEducativa.findById(admisionId);
+        const oferta = await OfertaEducativa.findById(ofertaId);
         if (!oferta) {
             return res.status(404).json({ message: 'Oferta educativa no encontrada' });
         }
 
         // Obtener los profesores actuales asociadas a la oferta educativa
-        const profesoresActuales = oferta.profesores.map(oe => oe.toString());
+        const profesoresActuales = oferta.profesores.map(p => p.toString());
 
         // Identificar los profesores que deben ser eliminadas
         const profesoresIdsEntrantes = req.body.profesorIds.map(id => id.toString());
-        const profesoresAEliminar = profesoresActuales.filter(oe => !profesoresIdsEntrantes.includes(oe));
+        const profesoresAEliminar = profesoresActuales.filter(p => !profesoresIdsEntrantes.includes(p));
 
         // Eliminar los profesores que ya no están presentes en req.body.profesorIds
         if (profesoresAEliminar.length > 0) {
-            oferta.profesores = oferta.profesores.filter(oe => !profesoresAEliminar.includes(oe.toString()));
-            
-            // Eliminar la referencia de ofertaID en los profesores eliminadas
+            oferta.profesores = oferta.profesores.filter(p => !profesoresAEliminar.includes(p.toString()));
+
+            // Eliminar la referencia de ofertaId en los profesores eliminadas
             for (let profesorId of profesoresAEliminar) {
-                const profesor = await profesores.findById(profesorId);
+                const profesor = await Profesor.findById(profesorId);
                 if (profesor) {
-                    profesor.ofertasEducativas = profesor.ofertasEducativas.filter(a => a.toString() !== ofertaId.toString());
+                    profesor.ofertasEducativas = profesor.ofertasEducativas.filter(o => o.toString() !== ofertaId.toString());
                     await profesor.save();
                 }
             }
@@ -61,10 +68,10 @@ export const relacionarOfertaProfesor = async (req, res) => {
         // Actualizar los profesores con la oferta educativa vinculada
         const profesores = await Profesor.find({ _id: { $in: req.body.profesorIds } });
         for (let profesor of profesores) {
-            if (!profesor.profesores.includes(ofertaId)) {
-                profesor.profesores.push(ofertaId);
+            if (!profesor.ofertasEducativas.includes(ofertaId)) {
+                profesor.ofertasEducativas.push(ofertaId);
             }
-            await oferta.save();
+            await profesor.save();
         }
 
         res.json({ message: 'Oferta educativa y profesores vinculados exitosamente' });
