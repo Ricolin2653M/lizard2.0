@@ -4,15 +4,25 @@ import mongoose from 'mongoose';
 // Obtener todas las ofertas educativas
 export const getOfertas = async (req, res) => {
     try {
-        const ofertas = await OfertaEducativa.find().populate({
-            path: 'admisiones',
-            select: 'nombre' // Seleccionar solo el campo 'nombre' de la admisión
-        });
+        const ofertas = await OfertaEducativa.find().populate([
+            {
+                path: 'admisiones',
+                select: 'nombre' // Seleccionar solo el campo 'nombre' de la admisión
+            },
+            {
+                path: 'profesores',
+                select: 'nombre apellidos' // Seleccionar los campos 'nombre' y 'apellidos' de los profesores
+            }
+        ]);
 
-        // Mapear las admisiones para obtener solo los nombres en lugar de objetos completos
+        // Mapear las admisiones y profesores para obtener solo los nombres y apellidos en lugar de objetos completos
         const formattedOfertas = ofertas.map(oferta => ({
             ...oferta.toObject(),
-            admisiones: oferta.admisiones.map(admision => admision.nombre)
+            admisiones: oferta.admisiones.map(admision => admision.nombre),
+            profesores: oferta.profesores.map(profesor => ({
+                nombre: profesor.nombre,
+                apellidos: profesor.apellidos
+            }))
         }));
 
         res.json(formattedOfertas);
@@ -21,6 +31,7 @@ export const getOfertas = async (req, res) => {
         res.status(500).json({ message: 'Error en el servidor' });
     }
 }
+
 
 // Obtener una oferta educativa por su ID
 export const getOfertaById = async (req, res) => {
