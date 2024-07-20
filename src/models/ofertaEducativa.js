@@ -18,8 +18,11 @@ const ofertaEducativaSchema = new Schema({
     profesores: [{
         type: Schema.Types.ObjectId,
         ref: 'Profesor'
-    }]
-
+    }],
+    division: {
+        type: Schema.Types.ObjectId,
+        ref: 'Division'
+    }
 }, {
     timestamps: true,
     versionKey: false

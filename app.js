@@ -40,6 +40,7 @@ import profesorRoutes from './src/routes/profesor.routes.js'
 import userRoutes from './src/routes/user.routes.js'
 import admisionesOferta from './src/routes/oferta-admisiones.routes.js';
 import ofertaProfe from './src/routes/ofertaProfesor.routes.js';
+import divisionRoutes from './src/routes/division.routes.js';
 
 app.use('/api/admision', admisionRoutes);
 app.use('/api/auth',authRoutes);
@@ -48,5 +49,6 @@ app.use('/api/profesores',profesorRoutes);
 app.use('/api/users',userRoutes);
 app.use('/api/oferadmi',admisionesOferta);
 app.use('/api/ofertaprofe',ofertaProfe);
+app.use('/api/divisiones', divisionRoutes);
 
 export default app;
