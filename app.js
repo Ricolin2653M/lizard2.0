@@ -41,6 +41,9 @@ import userRoutes from './src/routes/user.routes.js'
 import admisionesOferta from './src/routes/oferta-admisiones.routes.js';
 import ofertaProfe from './src/routes/ofertaProfesor.routes.js';
 import divisionRoutes from './src/routes/division.routes.js';
+import cuatrimateofe from './src/routes/cuatri-mate-ofe.routes.js'
+import materiaRoutes from './src/routes/materia.routes.js';
+import cuatrimestreRoutes from './src/routes/cuatrimestre.routes.js'
 
 app.use('/api/admision', admisionRoutes);
 app.use('/api/auth',authRoutes);
@@ -50,5 +53,8 @@ app.use('/api/users',userRoutes);
 app.use('/api/oferadmi',admisionesOferta);
 app.use('/api/ofertaprofe',ofertaProfe);
 app.use('/api/divisiones', divisionRoutes);
+app.use('/api/cmo', cuatrimateofe);
+app.use('/api/materia', materiaRoutes);
+app.use('/api/cuatrimestre', cuatrimestreRoutes)
 
 export default app;
