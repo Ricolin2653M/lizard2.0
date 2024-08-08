@@ -44,7 +44,7 @@ export const relacionarOfertaMaterias = async (req, res) => {
 
         // Eliminar las materias que ya no están presentes en req.body.materiaIds
         if (materiasAEliminar.length > 0) {
-            oferta.materias = oferta.materias.filter(p => !profesoresAEliminar.includes(p.toString()));
+            oferta.materias = oferta.materias.filter(p => !materiasAEliminar.includes(p.toString()));
 
             // Eliminar la referencia de ofertaId en las materias eliminadas
             for (let materiaId of materiasAEliminar) {
