@@ -25,7 +25,7 @@ export const relacionarOfertaMaterias = async (req, res) => {
         // Verificar que cada materiaId sea válido
         for (let materiaId of req.body.materiaIds) {
             if (!mongoose.Types.ObjectId.isValid(materiaId)) {
-                return res.status(400).json({ message: `ID de profesor inválido: ${materiaId}` });
+                return res.status(400).json({ message: `ID de materia inválido: <${materiaId}>` });
             }
         }
 
@@ -71,7 +71,7 @@ export const relacionarOfertaMaterias = async (req, res) => {
             if (!materia.ofertasEducativas.includes(ofertaId)) {
                 materia.ofertasEducativas.push(ofertaId);
             }
-            await profesor.save();
+            await materia.save();
         }
 
         res.status(200).json({ message: 'Oferta educativa y materias vinculados exitosamente' });
