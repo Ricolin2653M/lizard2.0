@@ -13,6 +13,10 @@ const materiaSchema = new Schema({
     profesores: [{
         type: Schema.Types.ObjectId,
         ref: 'profesors'
+    }],
+    ofertasEducativas: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'OfertaEducativa'
     }]
 }, {
     timestamps: true,

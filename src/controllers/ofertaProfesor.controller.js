@@ -74,7 +74,7 @@ export const relacionarOfertaProfesor = async (req, res) => {
             await profesor.save();
         }
 
-        res.json({ message: 'Oferta educativa y profesores vinculados exitosamente' });
+        res.status(200).json({ message: 'Oferta educativa y profesores vinculados exitosamente' });
     } catch (error) {
         console.error('Error al vincular oferta educativa con profesores:', error);
         res.status(500).json({ message: 'Error en el servidor' });

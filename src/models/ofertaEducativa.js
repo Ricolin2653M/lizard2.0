@@ -22,7 +22,11 @@ const ofertaEducativaSchema = new Schema({
     division: {
         type: Schema.Types.ObjectId,
         ref: 'Division'
-    }
+    },
+    materias: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Materia'
+    }],
 }, {
     timestamps: true,
     versionKey: false

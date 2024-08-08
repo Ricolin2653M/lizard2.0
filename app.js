@@ -43,7 +43,8 @@ import ofertaProfe from './src/routes/ofertaProfesor.routes.js';
 import divisionRoutes from './src/routes/division.routes.js';
 import cuatrimateofe from './src/routes/cuatri-mate-ofe.routes.js'
 import materiaRoutes from './src/routes/materia.routes.js';
-import cuatrimestreRoutes from './src/routes/cuatrimestre.routes.js'
+import cuatrimestreRoutes from './src/routes/cuatrimestre.routes.js';
+import ofertaMaterias from './src/routes/ofertaMaterias.routes.js';
 
 app.use('/api/admision', admisionRoutes);
 app.use('/api/auth',authRoutes);
@@ -55,6 +56,7 @@ app.use('/api/ofertaprofe',ofertaProfe);
 app.use('/api/divisiones', divisionRoutes);
 app.use('/api/cmo', cuatrimateofe);
 app.use('/api/materia', materiaRoutes);
-app.use('/api/cuatrimestre', cuatrimestreRoutes)
+app.use('/api/cuatrimestre', cuatrimestreRoutes);
+app.use('/api/ofermat',ofertaMaterias);
 
 export default app;
