@@ -12,6 +12,10 @@ export const getOfertas = async (req, res) => {
             {
                 path: 'profesores',
                 select: 'nombre apellidos' // Seleccionar los campos 'nombre' y 'apellidos' de los profesores
+            },
+            {
+                path: 'materias',
+                select: 'nombre' // Seleccionar los campos 'nombre' de las materias
             }
         ]);
 
@@ -22,7 +26,8 @@ export const getOfertas = async (req, res) => {
             profesores: oferta.profesores.map(profesor => ({
                 nombre: profesor.nombre,
                 apellidos: profesor.apellidos
-            }))
+            })),
+            materias: oferta.materias.map(materia => materia.nombre)
         }));
 
         res.json(formattedOfertas);
