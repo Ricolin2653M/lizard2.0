@@ -3,13 +3,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const sendEmail = async (req, res) => {
-    const { remitente, asunto, mensaje } = req.body;
+    const { name, email, asunto, mensaje } = req.body;
 
-    if (!remitente || !asunto || !mensaje) {
+    if (!name || !email || !asunto || !mensaje) {
         return res.status(400).json({ message: 'Todos los campos son requeridos' });
     }
 
-    const mensajeNuevo = `Enviado por: ${remitente}\n\n${mensaje}`;
+    const mensajeNuevo = `Enviado por: ${name}\nCorreo: ${email}\n\n${mensaje}`;
 
     // Configuración del transporte de nodemailer usando SMTP de Gmail
     const transporter = nodemailer.createTransport({
