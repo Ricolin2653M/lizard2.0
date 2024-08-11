@@ -25,6 +25,10 @@ export const getDivisions = async (req, res) => {
                     {
                         path: 'profesores',
                         select: 'nombre'
+                    },
+                    {
+                        path: 'materias',
+                        select: 'nombre'
                     }
                 ]
             });
