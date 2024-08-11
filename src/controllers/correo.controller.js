@@ -5,8 +5,11 @@ dotenv.config();
 export const sendEmail = async (req, res) => {
     const { remitente, asunto, mensaje } = req.body;
 
-    const mensajeNuevo = "Enviado por: " + remitente + "\n\n" + mensaje;
+    if (!remitente || !asunto || !mensaje) {
+        return res.status(400).json({ message: 'Todos los campos son requeridos' });
+    }
 
+    const mensajeNuevo = `Enviado por: ${remitente}\n\n${mensaje}`;
 
     // Configuración del transporte de nodemailer usando SMTP de Gmail
     const transporter = nodemailer.createTransport({
@@ -28,6 +31,6 @@ export const sendEmail = async (req, res) => {
         res.status(200).json({ message: 'Correo enviado exitosamente' });
     } catch (error) {
         console.error('Error al enviar el correo:', error);
-        res.status(500).json({ message: 'Error al enviar el correo' });
+        res.status(500).json({ message: 'Error al enviar el correo', error: error.message });
     }
 };
