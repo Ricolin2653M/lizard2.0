@@ -6,5 +6,6 @@ const router = Router();
 
 //Ruta para relacionar una oferta educativa con una o varias materias
 router.post('/', [authJwt.verifyToken, authJwt.isAdmin], ofertaMateriasCtrl.relacionarOfertaMaterias);
+router.get('/:id/materias', ofertaMateriasCtrl.obtenerMateriasPorOferta);
 
 export default router;

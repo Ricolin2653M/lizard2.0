@@ -80,3 +80,26 @@ export const relacionarOfertaMaterias = async (req, res) => {
         res.status(500).json({ message: 'Error en el servidor' });
     }
 }
+
+export const obtenerMateriasPorOferta = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Validar que el ID de la oferta educativa sea válido
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: `ID de oferta educativa inválido: ${id}` });
+        }
+
+        // Buscar la oferta educativa y poblar el campo "materias"
+        const oferta = await OfertaEducativa.findById(id).populate('materias');
+        if (!oferta) {
+            return res.status(404).json({ message: 'Oferta educativa no encontrada' });
+        }
+
+        // Responder con las materias encontradas
+        res.status(200).json(oferta.materias);
+    } catch (error) {
+        console.error('Error al obtener las materias:', error);
+        res.status(500).json({ message: 'Error al obtener las materias' });
+    }
+}
