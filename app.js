@@ -34,6 +34,7 @@ app.use(cors(
                                     
 */
 import admisionRoutes from './src/routes/admision.routes.js';
+import publicacionRoutes from './src/routes/publicacion.routes.js';
 import authRoutes from './src/routes/auth.routes.js';
 import ofertaRoutes from './src/routes/oferta.routes.js'
 import profesorRoutes from './src/routes/profesor.routes.js'
@@ -48,6 +49,7 @@ import ofertaMaterias from './src/routes/ofertaMaterias.routes.js';
 import envioCorreo from "./src/routes/correo.routes.js";
 
 app.use('/api/admision', admisionRoutes);
+app.use('/api/publicacion', publicacionRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/oferta',ofertaRoutes);
 app.use('/api/profesores',profesorRoutes);
