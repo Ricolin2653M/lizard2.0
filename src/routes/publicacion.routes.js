@@ -12,7 +12,7 @@ const router = Router();
   #####   ####  #    #   #   #    #  ####  ###### ###### ###### #    #  ####  
                                                                               
 */
-import * as admisionCtrl from '../controllers/publicación.controller.js';
+import * as publicacionCtrl from '../controllers/publicación.controller.js';
 
 /*
  #     #                                                                  
@@ -27,8 +27,8 @@ import { authJwt } from "../middlewares/index.js";
 
 
 //Establecer ruta admision mediante el metodo GET
-router.get('/',admisionCtrl.getAdmisiones);
-router.get('/:publicacionId', admisionCtrl.getAdmisionById);
-router.post('/', admisionCtrl.createAdmision);
+router.get('/',publicacionCtrl.getPublicaciones);
+router.get('/:publicacionId', publicacionCtrl.getPublicacionById);
+router.post('/', publicacionCtrl.createPublicacion);
 
 export default router;
